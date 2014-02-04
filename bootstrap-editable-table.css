@@ -1,0 +1,15 @@
+table[data-editable] input,
+table[data-editable] textarea {
+  border: 0;
+  display: block;
+  resize: none;
+  font: inherit;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+table[data-editable] tbody td {
+  cursor: text;
+}

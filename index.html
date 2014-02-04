@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Editable Table – A bootstrap plugin</title>
+
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="bootstrap-editable-table.css">
+  <style>
+  body {
+    font-family: Helvetica, Arial;
+  }
+  header {
+    padding: 18px 18px 24px;
+    background: #222;
+    color: #fff;
+
+    /* hoodie hoodie hoodie! */
+    background-image: linear-gradient(90deg, #2C2A86 20.5%, #078D2D 20.5%, #078D2D 37.5%, #FCB20D 37.5%, #FCB20D 55.5%, #EC5100 55.5%, #EC5100 72.5%, #6A3C06 72.5%, #6A3C06 79.5%, #C01C1B 79.5%);
+    background-size: 300px 6px;
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+  }
+  header a {
+    color: #fff !important;
+  }
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  h6 {
+    margin: 0;
+  }
+  </style>
+</head>
+
+<header>
+  <h1>
+    Bootstrap Editable Table
+  </h1>
+  <h6>
+    Made by <a href="http://hood.ie">team Hoodie</a> with love. <a href="https://www.gittip.com/hoodiehq/">Leave a tip</a> or <a href="https://github.com/gr2m/bootstrap-editable-table">fork this</a>.
+  </h6>
+</header>
+
+<table data-editable class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>E-Mail</th>
+      <th>Birthday</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- The last <tr> in the <tbody> will be used as template for new rows -->
+    <tr>
+      <td><input name="name" placeholder="Joe Doe"></td>
+      <td><input name="email" placeholder="joe@example.com" type="email"></td>
+      <td><input name="birthday" placeholder="joe@example.com" type="date"></td>
+    </tr>
+  </tbody>
+</table>
+
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bootstrap-editable-table.js"></script>
+</body>
+</html>
