@@ -1,7 +1,6 @@
 (function ($) {
   'use strict';
 
-
   // EDITABLE TABLE CLASS DEFINITION
   // ===============================
 
@@ -37,12 +36,13 @@
       $template = $body.find('tr:last-child').data('isNew', 1).clone();
       defaultValues = serializeRow($template);
 
-      $table.on('blur', 'tbody', handleBlur);
-      $table.on('click', '[data-remove]', handleClickOnRemoveButton);
-      $table.on('click', 'tbody td', handleClick);
-      $table.on('focus', 'tbody tr:last-child', handleFocusInLastRow);
-      $table.on('focus', 'tbody tr', handleFocus);
-      $table.on('input', handleInput);
+      $body.on('blur', 'tr', handleBlur);
+      $body.on('click', '[data-remove]', handleClickOnRemoveButton);
+      $body.on('click', 'td', handleClick);
+      $body.on('focus', 'tr:last-child', handleFocusInLastRow);
+      $body.on('focus', 'tr', handleFocus);
+      $body.on('input', handleInput);
+      $body.on('DOMNodeRemoved', 'tr', handleRemove);
 
       $table.on('add:record', addRecord);
       $table.on('add:records', addRecords);
@@ -67,7 +67,7 @@
     //
     function handleClickOnRemoveButton (event) {
       var $row = $(event.target).closest('tr');
-      removeRow($row);
+      $row.remove();
 
       removeEmptyRows();
     }
@@ -124,6 +124,13 @@
 
       $table.trigger('record:change', [eventName, record, index]);
       $table.trigger('record:' + eventName, [record, index]);
+    }
+
+    //
+    //
+    //
+    function handleRemove (event) {
+      removeRow( $(event.currentTarget) );
     }
 
     // Hooks
@@ -211,8 +218,9 @@
     function removeEmptyRows( currentRow ) {
       var $lastRow = $body.find('tr:last-child');
       var $prev = $lastRow.prev();
+
       while($prev[0] !== currentRow && isEmptyRow($prev)) {
-        removeRow($prev);
+        $prev.remove();
         $prev = $lastRow.prev();
       }
     }
@@ -240,20 +248,24 @@
 
     //
     // removes row and triggers according events
-    //
+    // 1. triggers events on next tick, as the row still exists
+    //    in DOM when removeRow gets executed.
     function removeRow ($row) {
       var record;
       var index;
       var isNew = $row.data('isNew');
 
       if (isNew) {
-        return $row.remove();
+        return;
       }
 
       record = serializeRow($row);
       index = $row.index();
-      $table.trigger('record:change', ['remove', record, index]);
-      $table.trigger('record:remove', [record, index]);
+
+      setTimeout( function() { /* [1] */
+        $table.trigger('record:change', ['remove', record, index]);
+        $table.trigger('record:remove', [record, index]);
+      });
     }
 
     //
