@@ -10,62 +10,270 @@
   // ones
   //
   //     $table = $('table').editableTable();
-  //     $table.on('record:add', handler);
-  //     $table.on('record:remove', handler);
-  //     $table.on('record:update', handler);
-  //     $table.on('record:change', handler);
+  //     $table.on('record:add', function(event, record, index) { /* ... */ });
+  //     $table.on('record:remove', function(event, record, index) { /* ... */ });
+  //     $table.on('record:update', function(event, record, index) { /* ... */ });
+  //     $table.on('record:change', function(event, eventType, record, index) { /* ... */ });
   //
   var EditableTable = function (el) {
-    var api = this;
+    var $table, $body, $template;
+    var defaultValues, removeTimeout;
 
-    // cache
-    this.$el = $(el);
+    // 1. cache elements for performance reasons and
+    // 2. setup event bindings
+    // 3. setup hooks
+    function initialize() {
+      $table = $(el);
+      $body = $table.find('tbody');
+      $template = $body.find('tr:last-child').data('isNew', 1).clone();
+      defaultValues = serializeRow($template);
 
-    // event handlers
-    function handleInput (event) {
-      var $row = $(event.target).closest('tr');
-      var id = $row.data('id');
-      var eventName = id ? 'update' : 'add';
+      $table.on('blur', 'tbody', handleBlur);
+      $table.on('click', '[data-remove]', handleClickOnRemoveButton);
+      $table.on('click', 'tbody td', handleClick);
+      $table.on('focus', 'tbody tr:last-child', handleFocusInLastRow);
+      $table.on('focus', 'tbody tr', handleFocus);
+      $table.on('input', handleInput);
 
-      if (eventName === 'add') {
-        $row.data('id', generateId());
-      }
-
-      api.$el.trigger('record:change', [eventName, serializeRow($row)]);
-      api.$el.trigger('record:' + eventName, [serializeRow($row)]);
-
-
-      // make sure that records get created for above rows
-      if (eventName === 'add') {
-        $row = $row.prev();
-        while($row.length) {
-          if ($row.data('id')) {
-            return;
-          }
-
-          $row.data('id', generateId());
-          api.$el.trigger('record:change', [eventName, serializeRow($row)]);
-          api.$el.trigger('record:' + eventName, [serializeRow($row)]);
-          $row = $row.prev();
-        }
-      }
+      $table.on('add:record', addRecord);
+      $table.on('add:records', addRecords);
+      $table.on('get:records', getRecords);
     }
 
+    // Event handlers
+    // --------------
+
+    //
+    // on blur, we remove empty rows at the end of the table.
+    // We need to give it a timeout though, otherwise rows would
+    // be removed before I can set focus in one of them
+    //
+    function handleBlur( /*event*/ ) {
+      removeTimeout = setTimeout( removeEmptyRows, 100);
+    }
+
+    //
+    // If an element with a `data-remote` attribute gets clicked,
+    // remove the row
+    //
     function handleClickOnRemoveButton (event) {
       var $row = $(event.target).closest('tr');
       removeRow($row);
 
-      // if table is growable, remove empty rowns
-      var growableTable = api.$el.data('bs.growableTable');
-      if (growableTable) {
-        growableTable.removeEmptyRows();
+      removeEmptyRows();
+    }
+
+    //
+    // Catch clicks outside of the inputs and set focus accordingly
+    // 1. Ignore clicks that are not on <td> elements
+    //
+    function handleClick(event) {
+      if (event.currentTarget === event.target) { /* [1] */
+        $(event.target).find(':input').focus();
       }
     }
 
-    // events
-    this.$el.on('input', handleInput);
-    this.$el.on('click', '[data-remove]', handleClickOnRemoveButton);
+    //
+    // add a new row when focus is set in the last one. That makes
+    // the table grow automatically, no need for extra buttons.
+    //
+    function handleFocusInLastRow( /*event*/ ) {
+      addRow();
+    }
+
+    //
+    // When an element is focused, remove empty rows at the bottom,
+    // but only until the currently focussed row is reached.
+    // 1. Stop the timout started in `handleBlur`
+    //
+    function handleFocus( event ) {
+      removeEmptyRows(event.currentTarget);
+      clearTimeout(removeTimeout); /* [1] */
+    }
+
+    //
+    // Trigger events
+    // 1. If the user left empty rows before making a change, make
+    //    sure to create records for the empty rows above as well,
+    //    otherwise they can't be stored, and maybe the user left
+    //    them empty on purpose
+    //
+    function handleInput (event) {
+      var input = event.target;
+      var $row = $(input).closest('tr');
+      var index = $row.index();
+      var record = serializeRow($row);
+      var isNew = $row.data('isNew');
+      var eventName = isNew ? 'add' : 'update';
+
+      if (eventName === 'add') {
+        $row.removeData('isNew');
+        createRecordsAbove($row); /* [1] */
+      } else {
+        record[input.name] = input.value;
+      }
+
+      $table.trigger('record:change', [eventName, record, index]);
+      $table.trigger('record:' + eventName, [record, index]);
+    }
+
+    // Hooks
+    // -----
+
+    //
+    //
+    //
+    function addRecord (event, record, index) {
+      addRow(record, index);
+    }
+
+    //
+    //
+    //
+    function addRecords (event, records, index) {
+      index = index || 0;
+
+      records.forEach(function(record, i) {
+        addRow(record, i + index);
+      });
+    }
+
+    //
+    // get & return all records from table
+    //
+    function getRecords (event, callback) {
+      var records = [];
+      $body.find('tr:not(:last-child)').each(function() {
+        records.push(serializeRow($(this)));
+      });
+      callback(records);
+    }
+
+
+
+    // Internal Methods
+    // ----------------
+
+    //
+    // adds a new row to the end of the table.
+    //
+    function addRow(record, index) {
+      var $row = $template.clone();
+
+      if (! record) {
+        $row.data('isNew', 1);
+        return $body.append($row);
+      }
+
+      $row.data('id', record.id);
+      $row.find(':input').each( function() {
+        this.value = record[this.name] || '';
+      });
+
+      if (index === undefined) {
+        return $body.find('tr:last-child').before($row);
+      }
+
+      $body.find('tr').eq(index).before($row);
+    }
+
+    //
+    // A row is considered empty when its values match
+    // the templates values
+    //
+    function isEmptyRow($row) {
+      var record = serializeRow($row);
+
+      for(var property in defaultValues) {
+        if (property !== 'id' && defaultValues[property] !== record[property]) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    //
+    // removes all rows that are empty. Optionally the
+    // current row can be passed to prevent it from being
+    // removed.
+    //
+    function removeEmptyRows( currentRow ) {
+      var $lastRow = $body.find('tr:last-child');
+      var $prev = $lastRow.prev();
+      while(isEmptyRow($prev) && $prev[0] !== currentRow) {
+        removeRow($prev);
+        $prev = $lastRow.prev();
+      }
+    }
+
+    // helpers
+
+    //
+    // turns a row into an object
+    //
+    function serializeRow ($row) {
+      var record = $row.data('record');
+
+      if (record) {
+        return record;
+      }
+
+      record = {};
+      $row.find(':input').each( function() {
+        record[this.name] = this.value.trim();
+      });
+      $row.data('record', record);
+
+      return record;
+    }
+
+    //
+    // removes row and triggers according events
+    //
+    function removeRow ($row) {
+      var record = serializeRow($row);
+      var index = $row.index();
+      $row.remove();
+
+      $table.trigger('record:change', ['remove', record, index]);
+      $table.trigger('record:remove', [record, index]);
+
+      return record;
+    }
+
+    //
+    // assure that all rows above the current row have
+    // existing records.
+    //
+    function createRecordsAbove ($row) {
+      var record;
+      var index;
+      $row = $row.prev();
+      index = $row.index();
+      while($row.length) {
+        if (hasRecord($row)) {
+          return;
+        }
+
+        record = serializeRow($row);
+        $table.trigger('record:change', ['add', record - 1]);
+        $table.trigger('record:add', [record - 1]);
+        $row = $row.prev();
+        i = i - 1;
+      }
+    }
+
+    //
+    //
+    //
+    function hasRecord ($row) {
+      return !! $row.data('record');
+    }
+
+    initialize();
   };
+
 
   // EDITABLE TABLE PLUGIN DEFINITION
   // ================================
@@ -90,192 +298,8 @@
   // EDITABLE TABLE DATA-API
   // =======================
 
-  $(document).on('input.bs.editableTable.data-api click.bs.editableTable.data-api', 'table[data-editable-spy]', function(event) {
+  $(document).on('input.bs.editableTable.data-api click.bs.editableTable.data-api focus.bs.editableTable.data-api', 'table[data-editable-spy]', function(event) {
     $(event.currentTarget).editableTable().removeAttr('data-editable-spy');
     $(event.target).trigger(event.type);
-  });
-
-
-  // GROWABLE TABLE CLASS DEFINITION
-  // ===============================
-
-  // Growable Table has all logic to automtically grow
-  // the table by adding new empty rows when a field in
-  // the last row is selected. It also clears up empty
-  // rows again.
-  var GrowableTable = function (el) {
-    var api = this;
-
-    // cache
-    this.$el = $(el);
-    this.$body = this.$el.find('tbody');
-    this.$template = this.$body.find('tr:last-child').clone();
-    this.defaultValues = serializeRow(this.$template);
-
-    // event handlers
-    function handleFocusInLastRow( /*event*/ ) {
-      api.addRow();
-    }
-
-    function handleFocus( event ) {
-      clearTimeout(api.removeTimeout);
-      api.removeEmptyRows(event.currentTarget);
-    }
-
-    function handleBlur( /*event*/ ) {
-      api.removeTimeout = setTimeout( $.proxy(api.removeEmptyRows, api), 100);
-    }
-
-    function handleClick(event) {
-      if (event.currentTarget === event.target) {
-        $(event.target).find(':input').focus();
-      }
-    }
-
-    // events
-    this.$el.on('focus', 'tbody tr:last-child', handleFocusInLastRow);
-    this.$el.on('focus', 'tbody tr', handleFocus);
-    this.$el.on('blur', 'tbody', handleBlur);
-    this.$el.on('click', 'tbody td', handleClick);
-  };
-
-  //
-  // adds a new row to the end of the table.
-  //
-  GrowableTable.prototype.addRow = function (record) {
-    var $row = this.$template.clone();
-
-    if (record) {
-      $row.data('id', record.id);
-
-      $row.find(':input').each( function() {
-        this.value = record[this.name] || '';
-      });
-
-      this.$body.find('tr:last-child').before($row);
-    } else {
-
-      this.$body.append($row);
-    }
-  };
-
-  //
-  // removes all rows that are empty. Optionally the
-  // current row can be passed to prevent it from being
-  // removed.
-  //
-  GrowableTable.prototype.removeEmptyRows = function ( currentRow ) {
-    var $lastRow = this.$body.find('tr:last-child');
-    var $prev = $lastRow.prev();
-    while(this.isEmptyRow($prev) && $prev[0] !== currentRow) {
-      removeRow($prev);
-      $prev = $lastRow.prev();
-    }
-  };
-
-  //
-  // A row is considered empty when its values match
-  // the templates values
-  //
-  GrowableTable.prototype.isEmptyRow = function ($row) {
-    var record = serializeRow($row);
-
-    for(var property in this.defaultValues) {
-      if (property !== 'id' && this.defaultValues[property] !== record[property]) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  //
-  // turns a row into an object
-  //
-  function serializeRow ($row) {
-    var record = {};
-
-    $row.find(':input').each( function() {
-      record[this.name] = this.value.trim();
-    });
-
-    record.id = $row.data('id');
-
-    return record;
-  }
-
-  //
-  // removes all rows that are empty. Optionally the
-  // current row can be passed to prevent it from being
-  // removed.
-  //
-  GrowableTable.prototype.removeEmptyRows = function ( currentRow ) {
-    var $lastRow = this.$body.find('tr:last-child');
-    var $prev = $lastRow.prev();
-    while(this.isEmptyRow($prev) && $prev[0] !== currentRow) {
-      removeRow($prev);
-      $prev = $lastRow.prev();
-    }
-  };
-
-  //
-  // removes row and triggers according events
-  //
-  function removeRow ($row) {
-    var $table = $row.closest('table');
-    var record = serializeRow($row);
-    $row.remove();
-
-    $table.trigger('record:change', ['remove', record]);
-    $table.trigger('record:remove', [record]);
-
-    return record;
-  }
-
-  //
-  // generic function to generate a unique Id
-  //
-  var chars = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
-  var radix = chars.length;
-  var idLength = 7;
-
-  // helper to generate unique ids.
-  function generateId () {
-    var i, id = '';
-    for (i = 0; i < idLength; i++) {
-      var rand = Math.random() * radix;
-      var char = chars[Math.floor(rand)];
-      id += String(char).charAt(0);
-    }
-    return id;
-  }
-
-
-  // GROWABLE TABLE PLUGIN DEFINITION
-  // ================================
-
-  $.fn.growableTable = function (option) {
-    return this.each(function () {
-      var $this = $(this);
-      var api  = $this.data('bs.growableTable');
-
-      if (!api) {
-        $this.data('bs.growableTable', (api = new GrowableTable(this)));
-      }
-      if (typeof option === 'string') {
-        api[option].call($this);
-      }
-    });
-  };
-
-  $.fn.growableTable.Constructor = GrowableTable;
-
-
-  // GROWABLE TABLE DATA-API
-  // =======================
-
-  $(document).on('focus.bs.growableTable.data-api', 'table[data-growable-spy]', function(event) {
-    $(event.currentTarget).growableTable().removeAttr('data-growable-spy');
-    $(event.target).trigger('focus');
   });
 })(jQuery);
