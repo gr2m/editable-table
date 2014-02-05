@@ -165,7 +165,7 @@
         return $body.append($row);
       }
 
-      $row.data('id', record.id);
+      $row.data('record', record);
       $row.find(':input').each( function() {
         this.value = record[this.name] || '';
       });
