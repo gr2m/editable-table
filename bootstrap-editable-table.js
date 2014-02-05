@@ -5,7 +5,7 @@
   // EDITABLE TABLE CLASS DEFINITION
   // ===============================
 
-  // Editable Table provides an elegant API to list
+  // Editable Table provides an elegant API to listen
   // to changes, adding new rows or removing existing
   // ones
   //
@@ -14,6 +14,15 @@
   //     $table.on('record:remove', function(event, record, index) { /* ... */ });
   //     $table.on('record:update', function(event, record, index) { /* ... */ });
   //     $table.on('record:change', function(event, eventType, record, index) { /* ... */ });
+  //
+  // To get records out of the table, do
+  //
+  //     $table.trigger('get:records', [function(records) {/* ... */}])
+  //
+  // To add one or multiple records, do
+  //
+  //    $table.trigger('add:record', [record /*, atIndex */])
+  //    $table.trigger('add:records', [records /*, atIndex */])
   //
   var EditableTable = function (el) {
     var $table, $body, $template;
@@ -184,8 +193,9 @@
     function isEmptyRow($row) {
       var record = serializeRow($row);
 
+
       for(var property in defaultValues) {
-        if (property !== 'id' && defaultValues[property] !== record[property]) {
+        if (defaultValues[property] !== record[property]) {
           return false;
         }
       }
@@ -201,7 +211,7 @@
     function removeEmptyRows( currentRow ) {
       var $lastRow = $body.find('tr:last-child');
       var $prev = $lastRow.prev();
-      while(isEmptyRow($prev) && $prev[0] !== currentRow) {
+      while($prev[0] !== currentRow && isEmptyRow($prev)) {
         removeRow($prev);
         $prev = $lastRow.prev();
       }
@@ -232,14 +242,18 @@
     // removes row and triggers according events
     //
     function removeRow ($row) {
-      var record = serializeRow($row);
-      var index = $row.index();
-      $row.remove();
+      var record;
+      var index;
+      var isNew = $row.data('isNew');
 
+      if (isNew) {
+        return $row.remove();
+      }
+
+      record = serializeRow($row);
+      index = $row.index();
       $table.trigger('record:change', ['remove', record, index]);
       $table.trigger('record:remove', [record, index]);
-
-      return record;
     }
 
     //
@@ -257,10 +271,10 @@
         }
 
         record = serializeRow($row);
-        $table.trigger('record:change', ['add', record - 1]);
-        $table.trigger('record:add', [record - 1]);
+        $table.trigger('record:change', ['add', record, index]);
+        $table.trigger('record:add', [record, index]);
         $row = $row.prev();
-        i = i - 1;
+        index = index - 1;
       }
     }
 

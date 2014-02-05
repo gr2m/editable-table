@@ -81,9 +81,9 @@
 
     // save records on change
     $table.on('record:change', function(event, eventName, record, index) {
-      $table.trigger('get:records', function(records) {
+      $table.trigger('get:records', [function(records) {
         localStorage.setItem('records', JSON.stringify(records));
-      });
+      }]);
     });
   </script>
 </body>
