@@ -1,0 +1,37 @@
+{
+  "name": "bootstrap-navigable-table",
+  "version": "0.0.1",
+  "authors": [
+    "Gregor Martynus <gregor@martynus.net>"
+  ],
+  "description": "bootstrap plugin for elegant navigating along table inputs",
+  "main": "bootstrap-navigable-table.js",
+  "keywords": [
+    "bootstrap",
+    "plugin",
+    "table",
+    "form"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.0",
+    "bootstrap-editable-table": "~0.0.2"
+  },
+  "homepage": "https://github.com/gr2m/bootstrap-navigable-table",
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.1",
+    "commit": "c7f87e1f07b159605ec5d5695ca3043958967087"
+  },
+  "_source": "git://github.com/gr2m/bootstrap-navigable-table.git",
+  "_target": "~0.0.1",
+  "_originalSource": "bootstrap-navigable-table",
+  "_direct": true
+}

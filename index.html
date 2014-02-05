@@ -14,7 +14,7 @@
     <h6>Made by <a href="http://hood.ie">team Hoodie</a> with love. <a href="https://www.gittip.com/hoodiehq/">Leave a tip</a> or <a href="https://github.com/gr2m/bootstrap-editable-table">fork this</a>.</h6>
   </header>
 
-  <table data-editable data-editable-spy class="table table-hover table-striped">
+  <table data-editable data-editable-spy data-navigable-spy class="table table-hover table-striped">
     <thead>
       <tr>
         <th>Name</th>
@@ -34,6 +34,11 @@
       </tr>
     </tbody>
   </table>
+
+  <p class="info">
+    <strong>Note:</strong> This demo is using the <a href="https://github.com/gr2m/bootstrap-navigable-table">Bootstrap Navigable Table</a>
+    plugin for elegant navigating along the inputs using keyboard shortcuts. <br>It also persists data in localStorage, which is not part of the plugin.
+  </p>
 
   <style>
   body {
@@ -66,9 +71,19 @@
     font-weight: bold;
     cursor: pointer;
   }
+  p.info {
+    padding: 32px 8px 0;
+    font-size: 10px;
+    color: #888;
+  }
+  p.info a {
+    color: inherit;
+    text-decoration: underline;
+  }
   </style>
   <script src="bower_components/jquery/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/bootstrap-navigable-table/bootstrap-navigable-table.js"></script>
   <script src="bootstrap-editable-table.js"></script>
   <script>
     var records = {};

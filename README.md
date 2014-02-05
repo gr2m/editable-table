@@ -26,8 +26,8 @@ Usage
 <link rel="stylesheet" type="text/css" href="editable-table.css">
 <script src="editable-table.js"></script>
 
-<!-- The data-editable attribute initializes the table on first interaction -->
-<table data-editable class="table">
+<!-- The data-editable is used for styling, the data-editable-spy attribute initializes the behaviour on first interaction -->
+<table data-editable data-editable-spy class="table">
   <thead>
     <tr>
       <th>Name</th>

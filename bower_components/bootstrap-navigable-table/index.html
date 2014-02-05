@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Navigable Table – A bootstrap plugin</title>
+
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-editable-table/bootstrap-editable-table.css">
+</head>
+
+<body>
+  <header>
+    <h1>Bootstrap Navigable Table</h1>
+    <h6>Made by <a href="http://hood.ie">team Hoodie</a> with love. <a href="https://www.gittip.com/hoodiehq/">Leave a tip</a> or <a href="https://github.com/gr2m/bootstrap-navigable-table">fork this</a>.</h6>
+  </header>
+
+  <table data-navigable-spy data-editable data-editable-spy class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>E-Mail</th>
+        <th colspan="99">Birthday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input name="name" value="Raphael Saadiq" placeholder="Joe Doe"></td>
+        <td><input name="email" value="raphael@example.com" placeholder="joe@example.com" type="email"></td>
+        <td><input name="birthday" value="1966-05-14" placeholder="01/01/1980" type="date"></td>
+      </tr>
+      <tr>
+        <td><input name="name" value="Dawn Robinson" placeholder="Joe Doe"></td>
+        <td><input name="email" value="dawn@example.com" placeholder="joe@example.com" type="email"></td>
+        <td><input name="birthday" value="1965-11-24" placeholder="01/01/1980" type="date"></td>
+      </tr>
+      <tr>
+        <td><input name="name" value="Ali Shaheed Muhammad" placeholder="Joe Doe"></td>
+        <td><input name="email" value="ali@example.com" placeholder="joe@example.com" type="email"></td>
+        <td><input name="birthday" value="1970-08-11" placeholder="01/01/1980" type="date"></td>
+      </tr>
+      <tr>
+        <td><input name="name" placeholder="Joe Doe"></td>
+        <td><input name="email" placeholder="joe@example.com" type="email"></td>
+        <td><input name="birthday" placeholder="01/01/1980" type="date"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Supported keyboard shortcuts</h3>
+  <dl class="shortcuts dl-horizontal">
+    <dt>jump</dt><dd><span class="os-mac">⌘</span><span class="os-other">alt</span> + arrow keys</dd>
+    <dt>move</dt><dd><span class="os-mac">⌘</span><span class="os-other">alt</span> + shift + up/down</dd>
+    <dt>insert</dt><dd><span class="os-mac">⌘</span><span class="os-other">alt</span> + enter (+ shift)</dd>
+    <dt>duplicate</dt><dd><span class="os-mac">⌘</span><span class="os-other">alt</span> + d (+ shift)</dd>
+    <dt>delete</dt><dd><span class="os-mac">⌘</span><span class="os-other">alt</span> + shift + backspace</dd>
+  </dl>
+
+  <p class="info">
+    <strong>Note:</strong> This demo is using the <a href="https://github.com/gr2m/bootstrap-editable-table">Bootstrap Editable Table</a>
+    plugin for auto-adding of new rows, and for styling.<br>
+    Support keybord shortcuts:
+  </p>
+
+
+  <style>
+  body {
+    font-family: Helvetica, Arial;
+  }
+  header {
+    padding: 18px 18px 24px;
+    background: #222;
+    color: #fff;
+
+    /* hoodie hoodie hoodie! */
+    background-image: linear-gradient(90deg, #2C2A86 20.5%, #078D2D 20.5%, #078D2D 37.5%, #FCB20D 37.5%, #FCB20D 55.5%, #EC5100 55.5%, #EC5100 72.5%, #6A3C06 72.5%, #6A3C06 79.5%, #C01C1B 79.5%);
+    background-size: 300px 6px;
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+  }
+  header a {
+    color: #fff !important;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  header h6 {
+    margin: 0;
+  }
+  h3 {
+    padding: 32px 8px 4px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+  }
+  .shortcuts {
+    font-size: 12px;
+  }
+  .shortcuts dt {
+    width: 80px;
+  }
+  .shortcuts dd {
+    margin-left: 88px;
+  }
+  p.info {
+    padding: 0 8px;
+    font-size: 10px;
+    color: #888;
+  }
+  p.info a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  .os-mac .os-other,
+  .os-other .os-mac {
+    display: none;
+  }
+  </style>
+  <script src="bower_components/jquery/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/bootstrap-editable-table/bootstrap-editable-table.js"></script>
+  <script src="bootstrap-navigable-table.js"></script>
+  <script>
+    if (window.navigator.appVersion.indexOf('Mac') !== -1) {
+      document.body.className = 'os-mac';
+    } else {
+      document.body.className = 'os-other';
+    }
+  </script>
+</body>
+</html>
