@@ -4,7 +4,7 @@
   "authors": [
     "Gregor Martynus <gregor@martynus.net>"
   ],
-  "description": "bootstrap plugin for beautiful editing of data collections",
+  "description": "bootstrap plugin for elegant editing of data collections",
   "main": ["bootstrap-editable-table.js", "bootstrap-editable-table.css"],
   "keywords": [
     "bootstrap",

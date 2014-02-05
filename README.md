@@ -1,8 +1,7 @@
 Editable Table – A bootstrap plugin
 ===================================
 
-> A simple plugin that makes editing a collection of records a
-  breeze.
+> A Bootstrap plugin for elegant editing of data collections.
 
 
 Installation
@@ -11,7 +10,7 @@ Installation
 Simplest way to install is using [bower](http://bower.io/):
 
 ```
-bower install --save bootstrap-editable-table 
+bower install --save bootstrap-editable-table
 ```
 
 

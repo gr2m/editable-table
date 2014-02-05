@@ -13,3 +13,6 @@ table[data-editable] textarea {
 table[data-editable] tbody td {
   cursor: text;
 }
+table[data-editable] tbody tr:last-child [data-remove] {
+  visibility: hidden;
+}
