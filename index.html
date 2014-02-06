@@ -5,6 +5,7 @@
   <title>Editable Table – A bootstrap plugin</title>
 
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-expandable-input/bootstrap-expandable-input.css">
   <link rel="stylesheet" type="text/css" href="bootstrap-editable-table.css">
 </head>
 
@@ -19,6 +20,7 @@
       <tr>
         <th>Name</th>
         <th>E-Mail</th>
+        <th>Note</th>
         <th colspan="99">Birthday</th>
       </tr>
     </thead>
@@ -27,7 +29,10 @@
       <tr>
         <td><input name="name" placeholder="Joe Doe"></td>
         <td><input name="email" placeholder="joe@example.com" type="email"></td>
-        <td><input name="birthday" placeholder="joe@example.com" type="date"></td>
+        <td>
+          <div name="note" placeholder="This is joe" contenteditable></div>
+        </td>
+        <td><input name="birthday" placeholder="10/20/2000" type="date"></td>
         <td>
           <span data-remove>×</span>
         </td>
@@ -37,7 +42,9 @@
 
   <p class="info">
     <strong>Note:</strong> This demo is using the <a href="https://github.com/gr2m/bootstrap-navigable-table">Bootstrap Navigable Table</a>
-    plugin for elegant navigating along the inputs using keyboard shortcuts. <br>It also persists data in localStorage, which is not part of the plugin.
+    plugin for elegant navigating along the inputs using keyboard shortcuts and <a href="https://github.com/gr2m/bootstrap-expandable-input">Bootstrap Expandable Input</a>
+    for the auto-expanding textarea in the Note column.
+    <br>It also persists data in localStorage, which is not part of the plugin.
   </p>
 
   <style>
@@ -80,11 +87,25 @@
     color: inherit;
     text-decoration: underline;
   }
+  table {
+    white-space: nowrap;
+  }
+  table thead th {
+    min-width: 140px;
+  }
+  table thead th + th + th {
+    width: 100%;
+  }
+  [contenteditable] {
+    outline: none;
+  }
   </style>
   <script src="bower_components/jquery/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="bower_components/bootstrap-navigable-table/bootstrap-navigable-table.js"></script>
+  <script src="bower_components/bootstrap-expandable-input/bootstrap-expandable-input.js"></script>
   <script src="bootstrap-editable-table.js"></script>
+
   <script>
     var records = {};
     var $table = $('table');
@@ -100,6 +121,8 @@
         localStorage.setItem('records', JSON.stringify(records));
       }]);
     });
+
+
   </script>
 </body>
 </html>

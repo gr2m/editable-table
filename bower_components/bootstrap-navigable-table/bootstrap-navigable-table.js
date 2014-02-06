@@ -8,6 +8,7 @@
   var NavigableTable = function (el) {
     var $table, $body;
     var keyboardShortcutsMetakey;
+    var focusableSelector = '[name],a'
 
     //
     //
@@ -68,28 +69,32 @@
     //
     function jumpLeft (input) {
       var $cell = $(input).closest('td');
-      $cell.prev().find(':input').focus().select();
+      $cell.prev().find(focusableSelector).focus().select();
       return false;
     }
 
     //
     function jumpRight (input) {
       var $cell = $(input).closest('td');
-      $cell.next().find(':input').focus().select();
+      $cell.next().find(focusableSelector).focus().select();
       return false;
     }
 
     //
     function jumpUp (input) {
-      var $row = $(input).closest('tr');
-      $row.prev().find('[name=' + (input.name) + ']').focus().select();
+      var $cell = $(input).closest('td');
+      var $row = $cell.parent();
+      var index = $cell.index();
+      $row.prev().children('td,th').eq(index).find(focusableSelector).focus().select();
       return false;
     }
 
     //
     function jumpDown (input) {
-      var $row = $(input).closest('tr');
-      $row.next().find('[name=' + (input.name) + ']').focus().select();
+      var $cell = $(input).closest('td');
+      var $row = $cell.parent();
+      var index = $cell.index();
+      $row.next().children('td,th').eq(index).find(focusableSelector).focus().select();
       return false;
     }
 
@@ -140,7 +145,7 @@
     function insertUp (input) {
       var $row = $(input).closest('tr');
       var $newRow = $row.clone();
-      $newRow.find(':input').val('');
+      $newRow.find(focusableSelector).val('');
       $row.before($newRow);
       return false;
     }
@@ -149,7 +154,7 @@
     function insertDown (input) {
       var $row = $(input).closest('tr');
       var $newRow = $row.clone();
-      $newRow.find(':input').val('');
+      $newRow.find(focusableSelector).val('');
       $row.after($newRow);
       return false;
     }

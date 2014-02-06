@@ -23,7 +23,10 @@
     "test"
   ],
   "dependencies": {
-    "bootstrap": "~3.1.0",
-    "bootstrap-navigable-table": "~0.0.1"
+    "bootstrap": "~3.1.0"
+  },
+  "devDependencies": {
+    "bootstrap-navigable-table": "~0.0.1",
+    "bootstrap-expandable-input": "~0.0.3"
   }
 }

@@ -45,3 +45,11 @@ Usage
   </tbody>
 </table>
 ```
+
+Fine Print
+----------
+
+The Expandable Input Plugin have been authored by [Gregor Martynus](https://github.com/gr2m),
+proud member of [Team Hoodie](http://hood.ie/). Support our work on Hoodie: [gittip us](https://www.gittip.com/hoodiehq/).
+
+License: MIT

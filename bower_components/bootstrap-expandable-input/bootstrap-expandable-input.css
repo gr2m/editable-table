@@ -1,0 +1,31 @@
+[contenteditable] {
+  box-sizing: border-box;
+}
+html body [contenteditable] * {
+  color: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline !important;
+  font: inherit !important;
+  text-decoration: inherit !important;
+  background: inherit !important;
+}
+html body [contenteditable] div {
+  display: block !important;
+}
+html body [contenteditable]:empty:before {
+  content: attr(placeholder);
+  color: #aaa;
+}
+
+html body [contenteditable].contenteditable-inline {
+  display: inline-block;
+}
+html body [contenteditable].contenteditable-inline br {
+  display: none !important;
+}
+/* fixes cursor being shown outside of the input when cursor is at the end */
+html body [contenteditable].contenteditable-inline:after {
+  content: ' ';
+  font-size: 0;
+}

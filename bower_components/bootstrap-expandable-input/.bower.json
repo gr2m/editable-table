@@ -1,0 +1,39 @@
+{
+  "name": "bootstrap-expandable-input",
+  "version": "0.0.3",
+  "authors": [
+    "Gregor Martynus <gregor@martynus.net>"
+  ],
+  "description": "A Bootstrap plugin to use <{span|div|...} contenteditable> as expandable inputs.",
+  "main": [
+    "bootstrap-expandable-input.js",
+    "bootstrap-expandable-input.css"
+  ],
+  "keywords": [
+    "bootstrap",
+    "plugin",
+    "table",
+    "form"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.1.0"
+  },
+  "homepage": "https://github.com/gr2m/bootstrap-expandable-input",
+  "_release": "0.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.3",
+    "commit": "3f6223ea2f8ecd91a2f547d601970a3e0d8a1074"
+  },
+  "_source": "git://github.com/gr2m/bootstrap-expandable-input.git",
+  "_target": "~0.0.3",
+  "_originalSource": "bootstrap-expandable-input",
+  "_direct": true
+}

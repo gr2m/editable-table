@@ -78,7 +78,7 @@
     //
     function handleClick(event) {
       if (event.currentTarget === event.target) { /* [1] */
-        $(event.target).find(':input').focus();
+        $(event.target).find('[name]').focus();
       }
     }
 
@@ -108,8 +108,8 @@
     //    them empty on purpose
     //
     function handleInput (event) {
-      var input = event.target;
-      var $row = $(input).closest('tr');
+      var $input = $(event.target);
+      var $row = $input.closest('tr');
       var index = $row.index();
       var record = serializeRow($row);
       var isNew = $row.data('isNew');
@@ -119,7 +119,7 @@
         $row.removeData('isNew');
         createRecordsAbove($row); /* [1] */
       } else {
-        record[input.name] = input.value;
+        record[$input.attr('name')] = $input.val();
       }
 
       $table.trigger('record:change', [eventName, record, index]);
@@ -182,8 +182,9 @@
       }
 
       $row.data('record', record);
-      $row.find(':input').each( function() {
-        this.value = record[this.name] || '';
+      $row.find('[name]').each( function() {
+        var $input = $(this);
+        $input.val(record[$input.attr('name')] || '');
       });
 
       if (index === undefined) {
@@ -238,8 +239,9 @@
       }
 
       record = {};
-      $row.find(':input').each( function() {
-        record[this.name] = this.value.trim();
+      $row.find('[name]').each( function() {
+        var $input = $(this);
+        record[$input.attr('name')] = $input.val().trim();
       });
       $row.data('record', record);
 
