@@ -16,20 +16,19 @@
   //
   // To get records out of the table, do
   //
-  //     $table.trigger('get:records', [function(records) {/* ... */}])
+  //     $table.editableTable('serialize', function(records) {})
   //
   // To add one or multiple records, do
   //
-  //    $table.trigger('add:record', [record /*, atIndex */])
-  //    $table.trigger('add:records', [records /*, atIndex */])
+  //    $table.editableTable('add', recordOrRecords /*, atIndex */ )
   //
   var EditableTable = function (el) {
     var $table, $body, $template;
     var defaultValues, removeTimeout;
+    var api = this;
 
     // 1. cache elements for performance reasons and
     // 2. setup event bindings
-    // 3. setup hooks
     function initialize() {
       $table = $(el);
       $body = $table.find('tbody');
@@ -43,11 +42,37 @@
       $body.on('focus', 'tr', handleFocus);
       $body.on('input', handleInput);
       $body.on('DOMNodeRemoved', 'tr', handleRemove);
-
-      $table.on('add:record', addRecord);
-      $table.on('add:records', addRecords);
-      $table.on('get:records', getRecords);
     }
+
+    // JS API
+    // ------
+
+    //
+    // get & return all records from table
+    //
+    api.serialize = function serialize(callback) {
+      var records = [];
+      $body.find('tr:not(:last-child)').each(function() {
+        records.push(serializeRow($(this)));
+      });
+      callback(records);
+    };
+
+    //
+    //
+    //
+    api.add = function add(records, index) {
+      index = index || 0;
+
+      if (! $.isArray(records)) {
+        return addRow(record, index);
+      }
+
+      records.forEach(function(record, i) {
+        addRow(record, i + index);
+      });
+    };
+
 
     // Event handlers
     // --------------
@@ -131,38 +156,6 @@
     //
     function handleRemove (event) {
       removeRow( $(event.currentTarget) );
-    }
-
-    // Hooks
-    // -----
-
-    //
-    //
-    //
-    function addRecord (event, record, index) {
-      addRow(record, index);
-    }
-
-    //
-    //
-    //
-    function addRecords (event, records, index) {
-      index = index || 0;
-
-      records.forEach(function(record, i) {
-        addRow(record, i + index);
-      });
-    }
-
-    //
-    // get & return all records from table
-    //
-    function getRecords (event, callback) {
-      var records = [];
-      $body.find('tr:not(:last-child)').each(function() {
-        records.push(serializeRow($(this)));
-      });
-      callback(records);
     }
 
 
@@ -307,6 +300,7 @@
   // ================================
 
   $.fn.editableTable = function (option) {
+    var jsApiArgs =  Array.prototype.slice.apply(arguments, [1]);
     return this.each(function () {
       var $this = $(this);
       var api  = $this.data('bs.editableTable');
@@ -315,7 +309,7 @@
         $this.data('bs.editableTable', (api = new EditableTable(this)));
       }
       if (typeof option === 'string') {
-        api[option].call($this);
+        api[option].apply($this, jsApiArgs);
       }
     });
   };

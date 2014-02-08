@@ -112,14 +112,14 @@
 
     records = JSON.parse(localStorage.getItem('records'));
     if (records) {
-      $table.editableTable().trigger('add:records', [records]);
+      $table.editableTable('add', records);
     }
 
     // save records on change
     $table.on('record:change', function(event, eventName, record, index) {
-      $table.trigger('get:records', [function(records) {
+      $table.editableTable('serialize', function(records) {
         localStorage.setItem('records', JSON.stringify(records));
-      }]);
+      })
     });
 
 

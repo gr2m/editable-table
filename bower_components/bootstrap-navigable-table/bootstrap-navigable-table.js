@@ -8,7 +8,7 @@
   var NavigableTable = function (el) {
     var $table, $body;
     var keyboardShortcutsMetakey;
-    var focusableSelector = '[name],a'
+    var focusableSelector = '[name],a';
 
     //
     //
@@ -129,7 +129,7 @@
       var $row = $(input).closest('tr');
       var $newRow = $row.clone();
       $row.before($newRow);
-
+      jumpUp(input);
       return false;
     }
 
@@ -138,6 +138,7 @@
       var $row = $(input).closest('tr');
       var $newRow = $row.clone();
       $row.after($newRow);
+      jumpDown(input);
       return false;
     }
 
@@ -147,6 +148,7 @@
       var $newRow = $row.clone();
       $newRow.find(focusableSelector).val('');
       $row.before($newRow);
+      jumpUp(input);
       return false;
     }
 
@@ -156,6 +158,7 @@
       var $newRow = $row.clone();
       $newRow.find(focusableSelector).val('');
       $row.after($newRow);
+      jumpDown(input);
       return false;
     }
 

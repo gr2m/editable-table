@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-navigable-table",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "authors": [
     "Gregor Martynus <gregor@martynus.net>"
   ],
@@ -19,19 +19,18 @@
     "bower_components",
     "test"
   ],
-  "dependencies": {
+  "devDependencies": {
     "bootstrap": "~3.1.0",
     "bootstrap-editable-table": "~0.0.2"
   },
   "homepage": "https://github.com/gr2m/bootstrap-navigable-table",
-  "_release": "0.0.1",
+  "_release": "0.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.1",
-    "commit": "c7f87e1f07b159605ec5d5695ca3043958967087"
+    "tag": "0.0.3",
+    "commit": "c9657c8ac7a8c3e6694a8b03a6f522a12ede2f34"
   },
   "_source": "git://github.com/gr2m/bootstrap-navigable-table.git",
-  "_target": "~0.0.1",
-  "_originalSource": "bootstrap-navigable-table",
-  "_direct": true
+  "_target": "~0.0.3",
+  "_originalSource": "bootstrap-navigable-table"
 }

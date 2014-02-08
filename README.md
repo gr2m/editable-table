@@ -40,10 +40,23 @@ Usage
     <tr>
       <td><input name="name" placeholder="Joe Doe"></td>
       <td><input name="email" placeholder="joe@example.com" type="email"></td>
-      <td><input name="email" placeholder="joe@example.com" type="email"></td>
+      <td><input name="birthday" placeholder="10/20/2000" type="date"></td>
     </tr>
   </tbody>
 </table>
+```
+
+You can get or add records using the JS API:
+
+```js
+// get records out of table
+$table.editableTable('serialize', function(records) {})
+// add a new record to the end of the table
+$table.editableTable('add', {name: 'Joe', email: 'joe@example.com'})
+// add a new record after the 2nd
+$table.editableTable('add', {name: 'Joe', email: 'joe@example.com'}, 1)
+// add multiple records at once
+$table.editableTable('add', records)
 ```
 
 Fine Print
