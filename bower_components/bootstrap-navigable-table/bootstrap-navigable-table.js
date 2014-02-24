@@ -128,6 +128,7 @@
     function duplicateUp (input) {
       var $row = $(input).closest('tr');
       var $newRow = $row.clone();
+      passSelecectValues($row, $newRow);
       $row.before($newRow);
       jumpUp(input);
       return false;
@@ -137,6 +138,7 @@
     function duplicateDown (input) {
       var $row = $(input).closest('tr');
       var $newRow = $row.clone();
+      passSelecectValues($row, $newRow);
       $row.after($newRow);
       jumpDown(input);
       return false;
@@ -165,13 +167,28 @@
     //
     function remove (input) {
       var $row = $(input).closest('tr');
-      if ($row.next().length) {
+      var $next = $row.next();
+      // if there is a next row, and it's not the last one ...
+      if ($next.length && ! $next.is(':last-child')) {
         jumpDown(input);
       } else {
         jumpUp(input);
       }
       $row.remove();
       return false;
+    }
+
+    //
+    // when cloning a DOM element, values of <select> elements
+    // do not get cloned. We do it manually with this helper
+    //
+    function passSelecectValues($row, $newRow) {
+      var $originalSelects = $row.find('select');
+      var $newSelects = $newRow.find('select');
+
+      $originalSelects.each( function(index) {
+        $newSelects.eq(index).val( this.value );
+      });
     }
 
     initialize();
