@@ -27,12 +27,18 @@
     var defaultValues, removeTimeout;
     var api = this;
 
+    // we keep track of records count to differentiate wheter a record
+    // for the current row has been created yet. We can do it this way
+    // is we do not allow for "gaps", meaning that if I make a change
+    // in row 1 and row 4, records get created for 2 & 3 automatically
+    var recordsCount = 0;
+
     // 1. cache elements for performance reasons and
     // 2. setup event bindings
     function initialize() {
       $table = $(el);
       $body = $table.find('tbody');
-      $template = $body.find('tr:last-child').data('isNew', 1).clone();
+      $template = $body.find('tr:last-child').clone();
       defaultValues = serializeRow($template);
 
       $body.on('blur', 'tr', handleBlur);
@@ -70,6 +76,7 @@
         return addRow(record, index);
       }
 
+      recordsCount = recordsCount + records.length;
       records.forEach(function(record, i) {
         addRow(record, i + index);
       });
@@ -139,18 +146,20 @@
       var $row = $input.closest('tr');
       var index = $row.index();
       var record = serializeRow($row);
-      var isNew = $row.data('isNew');
+      var isNew = (index + 1) > recordsCount;
       var eventName = isNew ? 'add' : 'update';
 
-      if (eventName === 'add') {
-        $row.removeData('isNew');
-        createRecordsAbove($row); /* [1] */
-      } else {
+      if (eventName === 'update') {
         record[$input.attr('name')] = $input.val();
       }
 
       $table.trigger('record:change', [eventName, record, index]);
       $table.trigger('record:' + eventName, [record, index]);
+
+      if (eventName === 'add') {
+        recordsCount = recordsCount + 1;
+        createRecordsAbove($row); /* [1] */
+      }
     }
 
     //
@@ -172,11 +181,9 @@
       var $row = $template.clone();
 
       if (! record) {
-        $row.data('isNew', 1);
         return $body.append($row);
       }
 
-      $row.data('record', record);
       $row.find('[name]').each( function() {
         var $input = $(this);
         $input.val(record[$input.attr('name')] || '');
@@ -195,7 +202,6 @@
     //
     function isEmptyRow($row) {
       var record = serializeRow($row);
-
 
       for(var property in defaultValues) {
         if (defaultValues[property] !== record[property]) {
@@ -227,30 +233,26 @@
     // turns a row into an object
     //
     function serializeRow ($row) {
-      var record = $row.data('record');
-
-      if (record) {
-        return record;
-      }
-
-      record = {};
+      var record = {};
       $row.find('[name]').each( function() {
         var $input = $(this);
         record[$input.attr('name')] = $input.val().trim();
       });
-      $row.data('record', record);
 
       return record;
     }
 
     //
     // removes row and triggers according events
-    // 1. triggers events on next tick, as the row still exists
+    // 1. there can be now "gaps" records. If we have 3 records
+    //    and the fourth row gets removed, we can be sure that
+    //    it hasn't been touched yet.
+    // 2. triggers events on next tick, as the row still exists
     //    in DOM when removeRow gets executed.
     function removeRow ($row) {
       var record;
       var index;
-      var isNew = $row.data('isNew');
+      var isNew = ($row.index() + 1) > recordsCount; /* [1] */
 
       if (isNew) {
         return;
@@ -258,8 +260,9 @@
 
       record = serializeRow($row);
       index = $row.index();
+      recordsCount = recordsCount - 1;
 
-      setTimeout( function() { /* [1] */
+      setTimeout( function() { /* [2] */
         $table.trigger('record:change', ['remove', record, index]);
         $table.trigger('record:remove', [record, index]);
       });
@@ -271,27 +274,19 @@
     //
     function createRecordsAbove ($row) {
       var record;
+      var newRecordsCount;
       var index;
-      $row = $row.prev();
-      index = $row.index();
-      while($row.length) {
-        if (hasRecord($row)) {
-          return;
-        }
+      var $rows = $row.siblings().andSelf();
+      newRecordsCount = $row.index() + 1;
+
+      for (;recordsCount < newRecordsCount; recordsCount++) {
+        index = recordsCount - 1;
+        $row = $rows.eq(index);
 
         record = serializeRow($row);
         $table.trigger('record:change', ['add', record, index]);
         $table.trigger('record:add', [record, index]);
-        $row = $row.prev();
-        index = index - 1;
       }
-    }
-
-    //
-    //
-    //
-    function hasRecord ($row) {
-      return !! $row.data('record');
     }
 
     initialize();
