@@ -41,6 +41,8 @@
       $body.on('focus', 'tr:last-child', handleFocusInLastRow);
       $body.on('focus', 'tr', handleFocus);
       $body.on('input', handleInput);
+      // select and check boxes do not trigger input events, so listen to change
+      $body.on('change', 'select,input[type=checkbox],input[type=radio]', handleInput);
       $body.on('DOMNodeRemoved', 'tr', handleRemove);
     }
 
