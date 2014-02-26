@@ -69,16 +69,18 @@
     //
     //
     //
-    api.add = function add(records, index) {
-      index = index || 0;
+    api.add = function add(records, options) {
+      options = options || {};
+      options.at = options.at || 0;
 
       if (! $.isArray(records)) {
-        return addRow(record, index);
+        return addRow(record, options);
       }
 
       recordsCount = recordsCount + records.length;
-      records.forEach(function(record, i) {
-        addRow(record, i + index);
+      records.forEach(function(record) {
+        addRow(record, options);
+        options.at++;
       });
     };
 
@@ -177,8 +179,9 @@
     //
     // adds a new row to the end of the table.
     //
-    function addRow(record, index) {
+    function addRow(record, options) {
       var $row = $template.clone();
+      var index = options && options.at;
 
       if (! record) {
         return $body.append($row);
@@ -191,6 +194,10 @@
 
       if (index === undefined) {
         return $body.find('tr:last-child').before($row);
+      }
+
+      if (options.decorate) {
+        options.decorate($row, record);
       }
 
       $body.find('tr').eq(index).before($row);

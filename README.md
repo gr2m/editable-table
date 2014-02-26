@@ -54,9 +54,13 @@ $table.editableTable('get', function(records) {})
 // add a new record to the end of the table
 $table.editableTable('add', {name: 'Joe', email: 'joe@example.com'})
 // add a new record after the 2nd
-$table.editableTable('add', {name: 'Joe', email: 'joe@example.com'}, 1)
+$table.editableTable('add', {name: 'Joe', email: 'joe@example.com'}, {at: 2})
 // add multiple records at once
 $table.editableTable('add', records)
+// before adding rows, decorate them with custom logic
+$table.editableTable('add', record, {decorate: function($tr, record) {
+  $tr.toggleClass('error', ! record.isValid)
+}})
 ```
 
 Fine Print
