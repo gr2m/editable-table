@@ -16,7 +16,7 @@
   //
   // To get records out of the table, do
   //
-  //     $table.editableTable('serialize', function(records) {})
+  //     $table.editableTable('get', function(records) {})
   //
   // To add one or multiple records, do
   //
@@ -58,7 +58,7 @@
     //
     // get & return all records from table
     //
-    api.serialize = function serialize(callback) {
+    api.get = function get(callback) {
       var records = [];
       $body.find('tr:not(:last-child)').each(function() {
         records.push(serializeRow($(this)));

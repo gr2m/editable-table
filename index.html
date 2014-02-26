@@ -118,7 +118,7 @@
     // save records on change
     $table.on('record:change', function(event, eventName, record, index) {
       console.log(eventName, record);
-      $table.editableTable('serialize', function(records) {
+      $table.editableTable('get', function(records) {
         localStorage.setItem('records', JSON.stringify(records));
       })
     });

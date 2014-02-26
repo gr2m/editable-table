@@ -50,7 +50,7 @@ You can get or add records using the JS API:
 
 ```js
 // get records out of table
-$table.editableTable('serialize', function(records) {})
+$table.editableTable('get', function(records) {})
 // add a new record to the end of the table
 $table.editableTable('add', {name: 'Joe', email: 'joe@example.com'})
 // add a new record after the 2nd
