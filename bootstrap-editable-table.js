@@ -320,12 +320,14 @@
 
   $.fn.editableTable.Constructor = EditableTable;
 
-
   // EDITABLE TABLE DATA-API
   // =======================
 
-  $(document).on('input.bs.editableTable.data-api click.bs.editableTable.data-api focus.bs.editableTable.data-api', 'table[data-editable-spy]', function(event) {
+  $(document).on('input.bs.editableTable.data-api focus.bs.editableTable.data-api', 'table[data-editable-spy]', function(event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
     $(event.currentTarget).editableTable().removeAttr('data-editable-spy');
-    $(event.target).trigger(event.type);
+    $(event.target).trigger($.Event(event));
   });
 })(jQuery);
