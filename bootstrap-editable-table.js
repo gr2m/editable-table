@@ -46,7 +46,7 @@
       $body.on('click', 'td', handleClick);
       $body.on('focus', 'tr:last-child', handleFocusInLastRow);
       $body.on('focus', 'tr', handleFocus);
-      $body.on('input', handleInput);
+      $body.on('input', '[name]', handleInput);
       // select and check boxes do not trigger input events, so listen to change
       $body.on('change', 'select,input[type=checkbox],input[type=radio]', handleInput);
       $body.on('DOMNodeRemoved', 'tr', handleRemove);
@@ -93,7 +93,8 @@
     // We need to give it a timeout though, otherwise rows would
     // be removed before I can set focus in one of them
     //
-    function handleBlur( /*event*/ ) {
+    function handleBlur( event ) {
+      $(event.currentTarget).closest('tr').removeClass('active');
       removeTimeout = setTimeout( removeEmptyRows, 100);
     }
 
@@ -132,6 +133,7 @@
     // 1. Stop the timout started in `handleBlur`
     //
     function handleFocus( event ) {
+      $(event.currentTarget).closest('tr').addClass('active');
       removeEmptyRows(event.currentTarget);
       clearTimeout(removeTimeout); /* [1] */
     }
@@ -323,11 +325,14 @@
   // EDITABLE TABLE DATA-API
   // =======================
 
-  $(document).on('input.bs.editableTable.data-api focus.bs.editableTable.data-api', 'table[data-editable-spy]', function(event) {
+  $(document).on('focus.bs.editableTable.data-api', 'table[data-editable-spy]', function(event) {
+    var $table = $(event.currentTarget);
+
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    $(event.currentTarget).editableTable().removeAttr('data-editable-spy');
+    $table.removeAttr('data-editable-spy');
+    $table.editableTable();
     $(event.target).trigger($.Event(event));
   });
 })(jQuery);
