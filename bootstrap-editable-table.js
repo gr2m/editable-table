@@ -168,21 +168,43 @@
     }
 
     //
+    // handle when a <tr> has been removed from DOM
     //
+    // [1] We have to ignore the event in case the removed
+    //     row has only been moved to another place. In that
+    //     case, handleInsert will set lastRemovedRow to
+    //     undefined, see below
     //
+    var lastRemovedRow;
     function handleRemove (event) {
-      removeRow( $(event.currentTarget) );
+      lastRemovedRow = event.currentTarget;
+      setTimeout(function() {
+        if (! lastRemovedRow) return; // [1]
+        removeRow( $(lastRemovedRow) );
+      });
     }
 
 
+    //
+    // handle when a <tr> has been added to DOM
+    //
+    // [1] We have to ignore the event in case the added
+    //     row has been removed beforehand, that means it
+    //     has only been moved to another place. See handleRemove
     //
     function handleInsert (event) {
       var $row = $(event.target);
       var record;
       var index;
 
+      if (event.target === lastRemovedRow) { // [1]
+        lastRemovedRow = undefined;
+        return;
+      }
+
       // ignore if new row is an auto-insert to the end of the table
       if ( $row.is(':last-child') ) return;
+
 
       record = serializeRow($row);
       index = $row.index();
