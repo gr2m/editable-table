@@ -50,6 +50,7 @@
       // select and check boxes do not trigger input events, so listen to change
       $body.on('change', 'select,input[type=checkbox],input[type=radio]', handleInput);
       $body.on('DOMNodeRemoved', 'tr', handleRemove);
+      $body.on('DOMNodeInserted', 'tr', handleInsert);
     }
 
     // JS API
@@ -174,6 +175,21 @@
     }
 
 
+    //
+    function handleInsert (event) {
+      var $row = $(event.target);
+      var record;
+      var index;
+
+      // ignore if new row is an auto-insert to the end of the table
+      if ( $row.is(':last-child') ) return;
+
+      record = serializeRow($row);
+      index = $row.index();
+
+      $table.trigger('record:change', ['add', record, index]);
+      $table.trigger('record:add', [record, index]);
+    }
 
     // Internal Methods
     // ----------------
@@ -253,7 +269,7 @@
 
     //
     // removes row and triggers according events
-    // 1. there can be now "gaps" records. If we have 3 records
+    // 1. there can be no "gaps" records. If we have 3 records
     //    and the fourth row gets removed, we can be sure that
     //    it hasn't been touched yet.
     // 2. triggers events on next tick, as the row still exists
