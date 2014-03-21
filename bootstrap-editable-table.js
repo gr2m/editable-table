@@ -177,10 +177,12 @@
     //
     var lastRemovedRow;
     function handleRemove (event) {
+      var index;
       lastRemovedRow = event.currentTarget;
+      index = $(lastRemovedRow).index();
       setTimeout(function() {
         if (! lastRemovedRow) return; // [1]
-        removeRow( $(lastRemovedRow) );
+        removeRow( $(lastRemovedRow), index );
       });
     }
 
@@ -294,25 +296,20 @@
     // 1. there can be no "gaps" records. If we have 3 records
     //    and the fourth row gets removed, we can be sure that
     //    it hasn't been touched yet.
-    // 2. triggers events on next tick, as the row still exists
-    //    in DOM when removeRow gets executed.
-    function removeRow ($row) {
+    function removeRow ($row, index) {
       var record;
-      var index;
-      var isNew = ($row.index() + 1) > recordsCount; /* [1] */
+      var isNew = (index + 1) > recordsCount; /* [1] */
 
       if (isNew) {
         return;
       }
 
       record = serializeRow($row);
-      index = $row.index();
+      index = index;
       recordsCount = recordsCount - 1;
 
-      setTimeout( function() { /* [2] */
-        $table.trigger('record:change', ['remove', record, index]);
-        $table.trigger('record:remove', [record, index]);
-      });
+      $table.trigger('record:change', ['remove', record, index]);
+      $table.trigger('record:remove', [record, index]);
     }
 
     //
