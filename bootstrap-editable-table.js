@@ -70,12 +70,15 @@
     //
     //
     //
+    var isAddingViaApi = false;
     api.add = function add(records, options) {
+      isAddingViaApi = true;
       options = options || {};
       options.at = options.at || 0;
 
       if (! $.isArray(records)) {
-        return addRow(record, options);
+        isAddingViaApi = false;
+        return addRow(records, options);
       }
 
       recordsCount = recordsCount + records.length;
@@ -83,6 +86,7 @@
         addRow(record, options);
         options.at++;
       });
+      isAddingViaApi = false;
     };
 
 
@@ -190,7 +194,8 @@
     //
     // handle when a <tr> has been added to DOM
     //
-    // [1] We have to ignore the event in case the added
+    // [1] When inserted row comes from calling api.add(), ignore
+    // [2] We have to ignore the event in case the added
     //     row has been removed beforehand, that means it
     //     has only been moved to another place. See handleRemove
     //
@@ -199,7 +204,9 @@
       var record;
       var index;
 
-      if (event.target === lastRemovedRow) { // [1]
+      if (isAddingViaApi) return; // [1]
+
+      if (event.target === lastRemovedRow) { // [2]
         lastRemovedRow = undefined;
         return;
       }
