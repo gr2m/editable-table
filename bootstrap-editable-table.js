@@ -74,7 +74,7 @@
     api.add = function add(records, options) {
       isAddingViaApi = true;
       options = options || {};
-      options.at = options.at || 0;
+      options.at = options.at || $body.find('tr').length - 1;
 
       if (! $.isArray(records)) {
         isAddingViaApi = false;
@@ -87,6 +87,35 @@
         options.at++;
       });
       isAddingViaApi = false;
+    };
+
+    //
+    //
+    //
+    api.update = function update(changedProperties, options) {
+      var position = options && options.at;
+      var $row;
+      if (! position) return;
+      $row = $body.find('tr').eq(position);
+
+      for(var key in changedProperties) {
+        if (changedProperties.hasOwnProperty(key)) {
+          $row.find('[name="'+key+'"]').val(changedProperties[key]);
+        }
+      }
+    };
+
+    //
+    //
+    //
+    var isRemovingViaApi = false;
+    api.remove = function remove(options) {
+      var position = options && options.at;
+      isRemovingViaApi = true;
+      if (! position) return;
+
+      $body.find('tr').eq(position).remove();
+      isRemovingViaApi = false;
     };
 
 

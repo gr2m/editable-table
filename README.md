@@ -61,6 +61,10 @@ $table.editableTable('add', records)
 $table.editableTable('add', record, {decorate: function($tr, record) {
   $tr.toggleClass('error', ! record.isValid)
 }})
+// update 1st row
+$table.editableTable('update', {email: 'new.joe@example.com'}, {at: 0})
+// remove 3rd row
+$table.editableTable('remove', {at: 2})
 ```
 
 Fine Print
