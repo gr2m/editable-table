@@ -74,7 +74,7 @@
     api.add = function add(records, options) {
       isAddingViaApi = true;
       options = options || {};
-      options.at = options.at || $body.find('tr').length - 1;
+      options.at = (typeof options.at !== 'undefined') ? options.at : ($body.find('tr').length - 1);
 
       if (! $.isArray(records)) {
         isAddingViaApi = false;
@@ -95,7 +95,7 @@
     api.update = function update(changedProperties, options) {
       var position = options && options.at;
       var $row;
-      if (! position) return;
+      if (typeof position === 'undefined') return;
       $row = $body.find('tr').eq(position);
 
       for(var key in changedProperties) {
@@ -111,8 +111,8 @@
     var isRemovingViaApi = false;
     api.remove = function remove(options) {
       var position = options && options.at;
+      if (typeof position === 'undefined') return;
       isRemovingViaApi = true;
-      if (! position) return;
 
       $body.find('tr').eq(position).remove();
       isRemovingViaApi = false;
