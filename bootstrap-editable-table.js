@@ -224,21 +224,27 @@
     // handle when a <tr> has been added to DOM
     //
     // [1] When inserted row comes from calling api.add(), ignore
-    // [2] We have to ignore the event in case the added
+    // [2] For unclear reasons, handleInsert event gets triggered
+    //     for any element added. So we stop here unless it's a tr
+    // [3] We have to ignore the event in case the added
     //     row has been removed beforehand, that means it
     //     has only been moved to another place. See handleRemove
     //
     function handleInsert (event) {
-      var $row = $(event.target);
+      var $row;
       var record;
       var index;
 
       if (isAddingViaApi) return; // [1]
 
-      if (event.target === lastRemovedRow) { // [2]
+      if (event.target.nodeName !== 'TR') return; // [2]
+
+      if (event.target === lastRemovedRow) { // [3]
         lastRemovedRow = undefined;
         return;
       }
+
+      $row = $(event.currentTarget);
 
       // ignore if new row is an auto-insert to the end of the table
       if ( $row.is(':last-child') ) return;
