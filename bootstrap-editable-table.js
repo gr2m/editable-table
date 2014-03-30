@@ -203,7 +203,9 @@
     //
     // handle when a <tr> has been removed from DOM
     //
-    // [1] We have to ignore the event in case the removed
+    // [1] For unclear reasons, handleInsert event gets triggered
+    //     for any element added. So we stop here unless it's a tr
+    // [2] We have to ignore the event in case the removed
     //     row has only been moved to another place. In that
     //     case, handleInsert will set lastRemovedRow to
     //     undefined, see below
@@ -211,10 +213,13 @@
     var lastRemovedRow;
     function handleRemove (event) {
       var index;
-      lastRemovedRow = event.currentTarget;
+
+      if (event.target.nodeName !== 'TR') return; // [1]
+
+      lastRemovedRow = event.target;
       index = $(lastRemovedRow).index();
       setTimeout(function() {
-        if (! lastRemovedRow) return; // [1]
+        if (! lastRemovedRow) return; // [2]
         removeRow( $(lastRemovedRow), index );
       });
     }
