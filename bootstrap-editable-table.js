@@ -205,22 +205,38 @@
     //
     // [1] For unclear reasons, handleInsert event gets triggered
     //     for any element added. So we stop here unless it's a tr
-    // [2] We have to ignore the event in case the removed
+    // [2] If the template row has been removed, add a new one.
+    // [3] We have to ignore the event in case the removed
     //     row has only been moved to another place. In that
     //     case, handleInsert will set lastRemovedRow to
     //     undefined, see below
+    // [4] Clean up empty rows at the end, but not the one that
+    //     currently has the focus
     //
     var lastRemovedRow;
     function handleRemove (event) {
       var index;
+      var $row;
 
       if (event.target.nodeName !== 'TR') return; // [1]
 
       lastRemovedRow = event.target;
-      index = $(lastRemovedRow).index();
+      $row = $(lastRemovedRow);
+      index = $row.index();
+
+      if ($row.is(':last-child')) { // [2]
+        addRow();
+      }
+
       setTimeout(function() {
-        if (! lastRemovedRow) return; // [2]
-        removeRow( $(lastRemovedRow), index );
+        var $rowWithFocus;
+        if (! lastRemovedRow) { // [3]
+
+          $rowWithFocus = $(document.activeElement).closest('tr')[0];
+          removeEmptyRows( $rowWithFocus ); // [4]
+          return;
+        }
+        triggerRemoveEventFor( $(lastRemovedRow), index );
       });
     }
 
@@ -343,7 +359,7 @@
     // 1. there can be no "gaps" records. If we have 3 records
     //    and the fourth row gets removed, we can be sure that
     //    it hasn't been touched yet.
-    function removeRow ($row, index) {
+    function triggerRemoveEventFor ($row, index) {
       var record;
       var isNew = (index + 1) > recordsCount; /* [1] */
 
