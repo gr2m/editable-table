@@ -77,9 +77,7 @@
       options.at = (typeof options.at !== 'undefined') ? options.at : ($body.find('tr').length - 1);
 
       if (! $.isArray(records)) {
-        addRow(records, options);
-        isAddingViaApi = false;
-        return;
+        records = [records];
       }
 
       recordsCount = recordsCount + records.length;
