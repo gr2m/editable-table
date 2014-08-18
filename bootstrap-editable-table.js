@@ -273,6 +273,8 @@
       record = serializeRow($row);
       index = $row.index();
 
+      recordsCount += 1;
+
       $table.trigger('record:change', ['add', record, index]);
       $table.trigger('record:add', [record, index]);
     }
