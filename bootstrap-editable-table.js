@@ -249,6 +249,8 @@
     // [3] We have to ignore the event in case the added
     //     row has been removed beforehand, that means it
     //     has only been moved to another place. See handleRemove
+    // [4] If the row has been added below an empty row, make sure
+    //     that records get created for empty rows above
     //
     function handleInsert (event) {
       var $row;
@@ -265,6 +267,8 @@
       }
 
       $row = $(event.currentTarget);
+
+      createRecordsAbove($row); // [4]
 
       // ignore if new row is an auto-insert to the end of the table
       if ( $row.is(':last-child') ) return;
