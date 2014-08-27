@@ -314,7 +314,7 @@
 
     //
     // A row is considered empty when its values match
-    // the templates values
+    // the template's values
     //
     function isEmptyRow($row) {
       var record = serializeRow($row);
