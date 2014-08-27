@@ -268,11 +268,10 @@
 
       $row = $(event.currentTarget);
 
-      createRecordsAbove($row); // [4]
-
       // ignore if new row is an auto-insert to the end of the table
       if ( $row.is(':last-child') ) return;
 
+      createRecordsAbove($row); // [4]
 
       record = serializeRow($row);
       index = $row.index();
