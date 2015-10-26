@@ -1,15 +1,17 @@
 {
-  "name": "bootstrap-editable-table",
-  "version": "1.0.0",
+  "name": "editable-table",
   "description": "editable table module for minutes",
+  "scripts": {
+    "test": "exit 0"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gr2m/bootstrap-editable-table.git"
+    "url": "https://github.com/gr2m/editable-table.git"
   },
   "author": "Gregor Martynus <gregor@martynus.net>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gr2m/bootstrap-editable-table/issues"
+    "url": "https://github.com/gr2m/editable-table/issues"
   },
-  "homepage": "http://gr2m.github.io/bootstrap-editable-table/"
-}
+  "homepage": "http://gr2m.github.io/editable-table/"
+  }
