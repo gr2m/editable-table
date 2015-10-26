@@ -2,7 +2,7 @@
   "name": "editable-table",
   "description": "editable table module for minutes",
   "scripts": {
-    "test": "exit 0"
+    "test": "exit 1"
   },
   "repository": {
     "type": "git",
