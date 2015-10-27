@@ -1,5 +1,6 @@
 {
   "name": "editable-table",
+  "version": "0.0.0-semantically-released",
   "description": "editable table module for minutes",
   "scripts": {
     "test": "exit 1",
