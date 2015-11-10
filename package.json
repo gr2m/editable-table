@@ -3,7 +3,7 @@
   "version": "0.0.0-semantically-released",
   "description": "editable table module for minutes",
   "scripts": {
-    "test": "exit 1",
+    "test": "standard editable-table.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
@@ -16,7 +16,11 @@
     "url": "https://github.com/gr2m/editable-table/issues"
   },
   "homepage": "http://gr2m.github.io/editable-table/",
+  "dependencies": {
+    "bootstrap": ""
+  },
   "devDependencies": {
-    "semantic-release": "^6.0.3"
+    "semantic-release": "^6.0.3",
+    "standard": "^5.3.1"
   }
 }
