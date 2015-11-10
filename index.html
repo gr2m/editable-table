@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <title>Editable Table – A bootstrap plugin</title>
 
-  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-expandable-input/bootstrap-expandable-input.css">
-  <link rel="stylesheet" type="text/css" href="bootstrap-editable-table.css">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="http://gr2m.github.io/expandable-input/bootstrap-expandable-input.css">
+  <link rel="stylesheet" type="text/css" href="editable-table.css">
 </head>
 
 <body>
@@ -100,11 +100,11 @@
     outline: none;
   }
   </style>
-  <script src="bower_components/jquery/jquery.min.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="bower_components/bootstrap-navigable-table/bootstrap-navigable-table.js"></script>
-  <script src="bower_components/bootstrap-expandable-input/bootstrap-expandable-input.js"></script>
-  <script src="bootstrap-editable-table.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="http://gr2m.github.io/navigable-table/bootstrap-navigable-table.js"></script>
+  <script src="http://gr2m.github.io/expandable-input/bootstrap-expandable-input.js"></script>
+  <script src="editable-table.js"></script>
 
   <script>
     var records = {};
@@ -117,7 +117,7 @@
 
     // save records on change
     $table.on('record:change', function(event, eventName, record, index) {
-      console.log(eventName, record);
+      // console.log(eventName, record);
       $table.editableTable('get', function(records) {
         localStorage.setItem('records', JSON.stringify(records));
       })
