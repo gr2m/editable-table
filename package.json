@@ -16,9 +16,6 @@
     "url": "https://github.com/gr2m/editable-table/issues"
   },
   "homepage": "http://gr2m.github.io/editable-table/",
-  "dependencies": {
-    "bootstrap": ""
-  },
   "devDependencies": {
     "semantic-release": "^6.0.3",
     "standard": "^5.3.1"
