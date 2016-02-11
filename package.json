@@ -1,22 +1,76 @@
 {
   "name": "editable-table",
-  "version": "0.0.0-semantically-released",
-  "description": "editable table module for minutes",
+  "description": "A Bootstrap plugin to use <{span|div|...} contenteditable> as expandable inputs.",
+  "main": "editable-table.js",
+  "files": [
+    "editable-table.js",
+    "editable-table.css",
+    "dist"
+  ],
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "exit 1",
+    "build": "bin/build.js",
+    "build:demo": "webpack --context demo/ --config demo/webpack.config.js -p",
+    "deploy": "npm run build:demo && npm run deploydocs",
+    "predeploydocs": "bin/authorize-push.js",
+    "deploydocs": "gh-pages-deploy",
+    "start": "frontend-test-server",
+    "pretest": "standard",
+    "test": "frontend-test-background mocha test/*.js",
+    "test:watch": "frontend-test-background mocha test/*.js --watch --reporter min",
+    "presemantic-release": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/gr2m/editable-table.git"
   },
-  "author": "Gregor Martynus <gregor@martynus.net>",
+  "keywords": [
+    "bootstrap",
+    "input",
+    "browser"
+  ],
+  "author": "Gregor Martynus",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gr2m/editable-table/issues"
   },
-  "homepage": "http://gr2m.github.io/editable-table/",
+  "homepage": "https://github.com/gr2m/editable-table",
   "devDependencies": {
-    "semantic-release": "^6.0.3"
+    "@gr2m/frontend-test-setup": "^1.1.6",
+    "bootstrap": "^3.3.6",
+    "browserify": "^13.0.0",
+    "chai": "^3.5.0",
+    "css-loader": "^0.23.1",
+    "expandable-input": "^1.0.4",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "gh-pages-deploy": "^0.4.0",
+    "jquery": "^2.2.0",
+    "mocha": "^2.4.5",
+    "semantic-release": "^6.2.0",
+    "standard": "^6.0.4",
+    "style-loader": "^0.13.0",
+    "uglify-js": "^2.6.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "gh-pages-deploy": {
+    "staticpath": "demo",
+    "noprompt": true
+  },
+  "standard": {
+    "ignore": [
+      "demo",
+      "dist"
+    ]
+  },
+  "frontend-test-setup": {
+    "server": {
+      "cmd": "webpack-dev-server --context demo --config demo/webpack.config.js --content-base demo -d"
+    }
   }
 }
