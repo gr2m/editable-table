@@ -1,0 +1,11 @@
+node_modules
+dist/
+log/
+demo/bundle.css
+demo/bundle.js
+demo/*.eot
+demo/*.woff2
+demo/*.woff2
+demo/*.woff
+demo/*.ttf
+demo/*.svg
