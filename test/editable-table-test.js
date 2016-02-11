@@ -27,7 +27,7 @@ function isError (value) {
   return value && value.name && /error/i.test(value.name)
 }
 
-describe('=== expandable-input ===', function () {
+describe('=== editable-table ===', function () {
   this.timeout(90000)
 
   beforeEach(function () {
