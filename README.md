@@ -37,7 +37,6 @@ The CSS code lives at `node_modules/editable-table/editable-table.css`
 <!-- load jquery -->
 <script src="jquery.js"></script>
 
-
 <!-- load editable-table assets -->
 <link rel="stylesheet" type="text/css" href="editable-table.css">
 <script src="editable-table.js"></script>
