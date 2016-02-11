@@ -1,6 +1,6 @@
 {
   "name": "editable-table",
-  "description": "A Bootstrap plugin to use <{span|div|...} contenteditable> as expandable inputs.",
+  "description": "A jQuery plugin to use <{span|div|...} contenteditable> as expandable inputs.",
   "main": "editable-table.js",
   "files": [
     "editable-table.js",
@@ -50,6 +50,7 @@
     "gh-pages-deploy": "^0.4.0",
     "jquery": "^2.2.0",
     "mocha": "^2.4.5",
+    "navigable-table": "^1.0.0",
     "semantic-release": "^6.2.0",
     "standard": "^6.0.4",
     "style-loader": "^0.13.0",
