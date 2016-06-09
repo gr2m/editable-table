@@ -48,7 +48,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "gh-pages-deploy": "^0.4.0",
-    "jquery": "^2.2.0",
+    "jquery": "^3.0.0",
     "mocha": "^2.5.2",
     "navigable-table": "^1.0.0",
     "semantic-release": "^6.2.0",
