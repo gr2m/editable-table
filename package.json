@@ -41,7 +41,7 @@
   "devDependencies": {
     "@gr2m/frontend-test-setup": "^1.1.6",
     "bootstrap": "^3.3.6",
-    "browserify": "^13.0.0",
+    "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "expandable-input": "^1.0.4",
