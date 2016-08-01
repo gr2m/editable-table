@@ -49,7 +49,7 @@
     "file-loader": "^0.9.0",
     "gh-pages-deploy": "^0.4.0",
     "jquery": "^3.0.0",
-    "mocha": "^2.5.2",
+    "mocha": "^3.0.0",
     "navigable-table": "^1.0.0",
     "semantic-release": "^6.2.0",
     "standard": "^7.0.0",
