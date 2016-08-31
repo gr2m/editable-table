@@ -10,8 +10,8 @@
 
 You can download the latest JS & CSS code here:
 
-- https://npmcdn.com/editable-table/dist/editable-table.js
-- https://npmcdn.com/editable-table/dist/editable-table.css
+- https://unpkg.com/editable-table/dist/editable-table.js
+- https://unpkg.com/editable-table/dist/editable-table.css
 
 Or install via [npm](https://www.npmjs.com/)
 
