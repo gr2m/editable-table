@@ -52,7 +52,7 @@
     "mocha": "^3.0.0",
     "navigable-table": "^1.0.0",
     "semantic-release": "^6.2.0",
-    "standard": "^7.0.0",
+    "standard": "^8.1.0",
     "style-loader": "^0.13.0",
     "uglify-js": "^2.6.1",
     "url-loader": "^0.5.7",
