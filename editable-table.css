@@ -1,4 +1,4 @@
-table[data-editable] input:not([type=checkbox]):not([type=radio]),
+table[data-editable] input:not([type="checkbox"]):not([type="radio"]),
 table[data-editable] textarea {
   border: 0;
   display: block;
