@@ -1,19 +1,19 @@
 {
   "name": "editable-table",
+  "version": "0.0.0-development",
+  "private": true,
   "description": "A jQuery plugin for editing a collection of records",
   "main": "editable-table.js",
-  "files": [
-    "editable-table.js",
-    "editable-table.css"
-  ],
-  "directories": {
-    "test": "test"
+  "scripts": {
+    "start": "serve"
   },
-  "scripts": {},
   "repository": "https://github.com/gr2m/editable-table.git",
   "keywords": [
-    "jquery-plugin"
+    "web-component"
   ],
   "author": "Gregor Martynus",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^11.2.0"
+  }
 }
