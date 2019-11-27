@@ -2,6 +2,8 @@
 
 > A web component for editing a collection of records
 
+![demo](assets/demo.gif)
+
 ## Usage
 
 ```html
