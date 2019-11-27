@@ -2,7 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Editable Table – A jQuery plugin</title>
+    <title>
+      Editable Table – A web component for editing a collection of records
+    </title>
 
     <style>
       html {
@@ -12,47 +14,79 @@
       table {
         text-align: left;
         width: 100%;
+        border-spacing: 0;
       }
       table th,
       table td {
         padding: 0.5em 0.5em 0.5em 0;
       }
+
+      table input:not([type="checkbox"]):not([type="radio"]),
+      table textarea {
+        border: 0;
+        display: block;
+        resize: none;
+        font: inherit;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        width: 100%;
+        background: transparent;
+      }
+      table tbody td {
+        cursor: text;
+      }
+      table tbody tr:last-child [data-remove] {
+        visibility: hidden;
+      }
+
+      table tr.active {
+        background: #ffc;
+      }
     </style>
-    <link rel="stylesheet" href="editable-table.css" charset="utf-8" />
   </head>
 
   <body>
     <h1>Editable Table</h1>
 
-    <table data-editable data-editable-spy>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>E-Mail</th>
-          <th colspan="99">Birthday</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- The last <tr> in the <tbody> will be used as template for new rows -->
-        <tr>
-          <td><input name="name" placeholder="Joe Doe" /></td>
-          <td>
-            <input name="email" placeholder="joe@example.com" type="email" />
-          </td>
-          <td>
-            <input
-              name="birthday"
-              placeholder="10/20/2000"
-              type="date"
-              required="required"
-            />
-          </td>
-          <td>
-            <span data-remove>×</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <editable-table>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>E-Mail</th>
+            <th colspan="99">Birthday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input name="name" placeholder="Joe Doe" autocomplete="off" />
+            </td>
+            <td>
+              <input
+                name="email"
+                placeholder="joe@example.com"
+                type="email"
+                autocomplete="off"
+              />
+            </td>
+            <td>
+              <input
+                name="birthday"
+                placeholder="10/20/2000"
+                type="date"
+                required="required"
+                autocomplete="off"
+              />
+            </td>
+            <td>
+              <span data-remove>×</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </editable-table>
 
     <noscript>
       <p>
@@ -63,30 +97,27 @@
     <p>
       <small>
         New rows are added automatically as you edit the last row. To remove a
-        row, click on the <strong>×</strong> icon.
+        row, click on the <strong>×</strong> icon. Data is persisted in
+        localStorage by handling custom events.
       </small>
     </p>
 
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
-      crossorigin="anonymous"
-    ></script>
-    <script src="editable-table.js"></script>
+    <script type="module" src="editable-table.js"></script>
     <script>
-      var records = {};
-      var $table = $("table");
+      customElements.whenDefined("editable-table").then(() => {
+        const $editableTable = document.querySelector("editable-table");
 
-      records = JSON.parse(localStorage.getItem("records"));
-      if (records) {
-        $table.editableTable("add", records);
-      }
+        const records = JSON.parse(localStorage.getItem("records"));
+        if (records) {
+          $editableTable.add(records);
+        }
 
-      // save records on change
-      $table.on("record:change", function(event, eventName, record, index) {
-        console.log(eventName, record);
-        $table.editableTable("get", function(records) {
-          localStorage.setItem("records", JSON.stringify(records));
+        // save records on change
+        $editableTable.addEventListener("record:change", function(event) {
+          const { changeType, index, record } = event.detail;
+          console.log(`record %d %s: %o`, index + 1, changeType, record);
+
+          localStorage.setItem("records", JSON.stringify($editableTable.get()));
         });
       });
     </script>
