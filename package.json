@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "private": true,
   "description": "A jQuery plugin for editing a collection of records",
-  "main": "editable-table.js",
+  "module": "editable-table.js",
   "scripts": {
     "start": "serve"
   },
