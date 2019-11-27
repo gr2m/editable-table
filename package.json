@@ -1,7 +1,7 @@
 {
   "name": "editable-table",
   "version": "0.0.0-development",
-  "description": "A jQuery plugin for editing a collection of records",
+  "description": "A web component for editing a collection of records",
   "module": "editable-table.js",
   "scripts": {
     "start": "serve"
