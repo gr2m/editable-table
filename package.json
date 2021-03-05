@@ -6,7 +6,7 @@
   "scripts": {
     "start": "serve"
   },
-  "repository": "https://github.com/gr2m/editable-table.git",
+  "repository": "github:gr2m/editable-table",
   "keywords": [
     "web-component"
   ],
