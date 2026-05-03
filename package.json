@@ -13,7 +13,7 @@
   "author": "Gregor Martynus",
   "license": "MIT",
   "devDependencies": {
-    "semantic-release": "^15.13.31",
-    "serve": "^11.2.0"
+    "semantic-release": "^25.0.3",
+    "serve": "^14.2.6"
   }
 }
